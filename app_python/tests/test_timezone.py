@@ -1,5 +1,5 @@
 import pytest
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 from src.timezone import getMskTime, TIME_ZONE
 

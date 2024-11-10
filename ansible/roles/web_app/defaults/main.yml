@@ -1,1 +1,1 @@
-server_image: 'caddy'
+wipe_web_app: false

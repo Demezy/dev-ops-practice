@@ -1,23 +1,67 @@
-- name: create app directory
-  file:
-    path: "{{app_path}}"
-    state: directory
-    mode: '0755'
+- block:
+    - name: create app directory
+      file:
+        path: "{{app_path}}"
+        state: directory
+        mode: "0755"
 
-- name: Copy app files
-  copy:
-    src: "{{item}}"
-    dest: "{{app_path}}/{{item}}"
-    mode: '0644'
-  with_items:
-    - index.html
+    - name: Manually sync app files using rsync
+      command: >
+        rsync -avz --delete --exclude-from='app_python/.gitignore'
+        -e "sudo ssh -o IdentitiesOnly=yes -i {{ ansible_ssh_private_key_file }} -p {{ ansible_port | default(22) }}"
+        app_python/ {{ ansible_user }}@{{ ansible_host }}:{{ app_path }}
+      delegate_to: localhost
 
+    - name: Wipe the app
+      import_tasks: wipe.yml
+      tags: wipe-web-app
+      when: wipe_web_app == true
 
-- name: Format jinja2 template for docker compose file
-  template:
-    src: docker-compose.yml.j2
-    dest: "{{app_path}}/docker-compose.yml"
-    mode: '0644'
+# - name: Sync app files excluding patterns in .gitignore
+#   synchronize:
+#     src: app_python/
+#     dest: "{{ app_path }}"
+#     mode: push
+#     delete: yes
+#     recursive: yes
+#     rsync_opts:
+#       [
+#         "-e",
+#         '"ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o IdentitiesOnly=yes -i {{ ansible_ssh_private_key_file }} -l {{ ansible_user }}"',
+#       ]
+
+# - name: Sync app files excluding patterns in .gititnore
+#   synchronize:
+#     src: app_python/
+#     dest: "{{ app_path }}"
+#     mode: push
+#     delete: yes
+#     recursive: yes
+#     use_ssh_args: yes
+#     # rsync_opts:
+#     #   - "--exclude-from=files/app_python/.gitignore"
+
+# - name: Sync app files
+#   synchronize:
+#     src: app_python/
+#     dest: "{{app_path}}"
+#     mode: push
+#     delete: yes
+#     recursive: yes
+# project maintain .rsync-filter file to exclude files from sync
+
+# copy:
+#   src: "{{item}}"
+#   dest: "{{app_path}}/{{item}}"
+#   mode: "0644"
+# with_items:
+#   - app_python
+
+# - name: Format jinja2 template for docker compose file
+#   template:
+#     src: docker-compose.yml.j2
+#     dest: "{{app_path}}/docker-compose.yml"
+#     mode: "0644"
 
 - name: (Re)Start Docker Compose
   command: "sh -c 'docker compose down ; docker compose up -d'"

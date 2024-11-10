@@ -2,9 +2,10 @@ all:
   vars:
     ansible_user: vagrant
     ansible_ssh_private_key_file: ../vagrant/.vagrant/machines/default/vmware_desktop/private_key
+    ansible_ssh_extra_args: "-o IdentitiesOnly=yes"
   children:
     vagrant_hosts:
       hosts:
-        default: 
-          ansible_host: 172.16.237.131
+        default:
+          ansible_host: 172.16.237.134
           ansible_port: 22
