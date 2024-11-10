@@ -1,5 +1,11 @@
+default:
+    just --list
+
 run-debug:
     poetry run uvicorn src.main:app --reload
 
 run:
     poetry run uvicorn src.main:app --host 0.0.0.0 --port 8000
+
+test:
+    poetry run pytest
