@@ -1,0 +1,10 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: app-python
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: app-python
+  endpoints:
+    - port: http
