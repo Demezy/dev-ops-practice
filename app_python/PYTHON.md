@@ -7,8 +7,12 @@ Also it is very lightweight and powerful.
 
 ## testing
 
-- we use most advanced manual testing framework - our software engineers
-- `src` folder contain stateless business logic. Run each file as main file to run tests
+- App utilizing pytest for testing purposes.
+- tests are located at `/tests`
+- they ensure correct application behacior
+- Also I've added shortcut `just test` to run tests.
+
+P.S. all local run commands stored in [`justfile`](https://github.com/casey/just)
 
 ## Coding standarts
 

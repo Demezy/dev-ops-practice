@@ -1,10 +1,14 @@
 import datetime
+from zoneinfo import ZoneInfo
+
+TIME_ZONE = "Europe/Moscow"
 
 
 def getMskTime():
-    msk = datetime.timezone(datetime.timedelta(hours=3))
-    time = datetime.datetime.now(msk)
-    return time.strftime("%Y-%m-%d %H:%M:%S")
+    # Get UTC time first, then convert to Moscow time
+    utc_time = datetime.datetime.now(datetime.timezone.utc)
+    msk_time = utc_time.astimezone(ZoneInfo(TIME_ZONE))
+    return msk_time.strftime("%Y-%m-%d %H:%M:%S")
 
 
 if __name__ == "__main__":
