@@ -5,11 +5,9 @@
 replicaCount: 1
 
 image:
-  repository: baupnet/app-python
-  # repository: nginx
+  repository: dsnfljasdfjlajsdfjl/devops-app
   pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: "port80"
+  tag: "latest"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -44,7 +42,7 @@ securityContext:
 
 service:
   type: LoadBalancer
-  port: 80
+  port: 5000
 
 ingress:
   enabled: false
@@ -77,13 +75,13 @@ resources:
   #   memory: 128Mi
 
 livenessProbe:
-  httpGet:
-    path: /
-    port: http
+  # httpGet:
+  #   path: /
+  #   port: http
 readinessProbe:
-  httpGet:
-    path: /
-    port: http
+  # httpGet:
+  #   path: /
+  #   port: http
 
 autoscaling:
   enabled: false
