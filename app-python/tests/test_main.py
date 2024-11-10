@@ -15,7 +15,10 @@ def test_read_root_success():
 def test_read_root_template_context():
     response = client.get("/")
     assert "text" in response.context
-    assert response.context["text"] == "hello there"
+    assert (
+        response.context["text"]
+        == 'hello there\n want to visit <a href="/time">time</a>'
+    )
 
 
 def test_read_time_success():
