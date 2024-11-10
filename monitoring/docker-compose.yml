@@ -61,3 +61,13 @@ services:
     ports:
       - "3000:3000"
     logging: *default-logging
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    logging: *default-logging
