@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 
-import timezone
+from src import timezone
 
 app = FastAPI()
 
@@ -14,7 +14,9 @@ templates = Jinja2Templates(directory="templates")
 def read_root(request: Request):
     print(request.headers)
     return templates.TemplateResponse(
-        request=request, name="webprint.j2", context={"text": "hello there"}
+        request=request,
+        name="webprint.j2",
+        context={"text": 'hello there\n want to visit <a href="/time">time</a>'},
     )
 
 
