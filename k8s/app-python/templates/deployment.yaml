@@ -19,24 +19,24 @@ spec:
       {{- end }}
       labels:
         {{- include "app-python.labels" . | nindent 8 }}
-        {{- with .Values.podLabels }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
     spec:
-      serviceAccountName: {{ include "app-python.serviceAccountName" . }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          env:
-            - name: MY_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "app-python.fullname" . }}-secret
-                  key: MY_SECRET
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/config.json
+              subPath: config.json
+            - name: visits-volume
+              mountPath: /app/visits
+      volumes:
+        - name: config-volume
+          configMap:
+            name: {{ .Release.Name }}-config
+        - name: visits-volume
+          emptyDir: {}

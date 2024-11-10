@@ -1,0 +1,7 @@
+{
+    "app_name": "python-time-app",
+    "version": "1.0.0",
+    "environment": "development",
+    "log_level": "INFO",
+    "max_visits": 1000
+}
